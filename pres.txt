@@ -1,0 +1,64 @@
+Lexer - Parser - Evaluator
+
+
+----- Lexer -----
+
+*(defvar var 4)
+
+* keywords
+
+* List<Token> =
+("(", "")
+("Function", "defvar")
+("VarSymbol", "var")
+("NumberLiteral", "4")
+(")", "")
+("EOF", "EOF")
+
+
+
+----- Parser -----
+(+ 1 (+ 2 3))
+
+List<Token> =
+("(", "")
+("Operator", "+")
+("NumberLiteral", "1")
+("(", "")
+("Operator", "+")
+("NumberLiteral", "2")
+("NumberLiteral", "3")
+(")", "")
+(")", "")
+("EOF", "EOF")
+
+
+*Predictive parsing
+
+*Context Free Grammar
+    GbinOp = {{expr, binOp, factor}, {op, NumberLiteral, (, )}, productions, expr}
+        productions:
+        expr       ::= ( binOp ) | ...
+        binOp   ::= op factor factor
+        factor  ::= NumberLiteral | ( binOp )
+        NumberLiteral ::= INTEGER
+
+* AST =     +
+           / \
+          1   +
+             / \
+            2   3
+
+----- Evaluator -----
+* Postorder traversal
+
+* Symbol Table
+    HM<String, HM<String, String>>      -- scope -> variabel, typ = {INTEGER, STRING, FUNCTION}
+    HM<String, HM<String, Integer>>     -- scope -> variabel, int
+    HM<String, HM<String, String>>      -- scope -> variabel, sträng
+    HM<String, HM<String, Node>>        -- scope -> variabel, node
+
+    lookup()
+    define()
+
+
